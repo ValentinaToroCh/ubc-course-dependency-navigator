@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>UBC Course Dependency Navigator</title>
+    </head>
+    <body>
+        <h1>Course Search</h1>
+        <p>getting the api to work</p>
+
+        <!-- button to get courses -->
+        <button type="button" onclick="getAllCourses()"> Get All Course Codes </button>
+
+        <ul id="demo">
+
+        </ul>
+
+        <script>
+            function getAllCourses(){
+                fetch('https://ubcexplorer.io/getAllCourses')
+                .then(res => {
+                    return res.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    const start = performance.now();
+                    data.forEach(course => {
+                        document.getElementById("demo").innerHTML += "<li>" + course.code + "</li>" + "<ul>" + "<li>credits:" + course.cred + "</li>" + "</ul>";
+                        console.log("done");
+                    });
+                    const end = performance.now();
+                    const elapsed = end - start;
+                    console.log('Script executed in ' + elapsed + 'time');
+                })
+            }
+        </script>
+
+    </body>
+ </html>
