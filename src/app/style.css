@@ -1,0 +1,13 @@
+body{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+h1 {
+    color:cadetblue;
+}
+
+button {
+    background-color: cadetblue;
+    color: whitesmoke;
+    border: 0ch;
+}
