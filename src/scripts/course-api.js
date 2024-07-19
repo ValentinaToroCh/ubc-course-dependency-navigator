@@ -48,14 +48,22 @@ function addPreReqButton(buttonText){
     console.log("created button id: " + btn.id);
 }
 
-/*  adds and deletes and header a header */
+/*  adds a header */
 function addHeader(headerID, headerText){
     document.getElementById(headerID).innerHTML = headerText;
 }
 
-function deleteHeader(headerID){
-    if (document.getElementById(headerID).hasChildNodes()){
-        const child = document.getElementById(headerID);
+// function deleteHeader(headerID){
+//     if (document.getElementById(headerID).hasChildNodes()){
+//         const child = document.getElementById(headerID);
+//         child.innerHTML = null;
+//     }
+// }
+
+/*  deletes HTML in a given item ID*/
+function deleteItem(itemID){
+    if (document.getElementById(itemID).hasChildNodes()){
+        const child = document.getElementById(itemID);
         child.innerHTML = null;
     }
 }
@@ -114,7 +122,8 @@ function searchCourse(isSearchedCourse, elementID, code){
             addHeader("courseSearchTitle","Course Searched:");
             displayCourse(true, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
             addPreReqButton("Get pre-requisites for: " + searchedCourseCode);
-            deleteHeader("preReqTitle");
+            deleteItem("preReqTitle");
+            deleteItem("preReqsCourseSearched");
             searchedCoursePre = cData.preq;
             console.log(searchedCoursePre);
             prevSearchedCourseCode = searchedCourseCode;
