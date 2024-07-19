@@ -32,12 +32,8 @@ function getCourseArray(isFromInput, courseString){
 }
 
 /*  dynamically adds a button with a text and links it to a corresponding
-    function, eliminates other buttons that may exist */
+    function */
 function addPreReqButton(buttonText){
-    if (prevSearchedCourseCode != null){
-        const child = document.getElementById(prevSearchedCourseCode);
-        document.body.removeChild(child);
-    }
     const btn = document.createElement('button');
     btn.innerHTML = buttonText;
     btn.id = searchedCourseCode;
@@ -53,17 +49,12 @@ function addHeader(headerID, headerText){
     document.getElementById(headerID).innerHTML = headerText;
 }
 
-// function deleteHeader(headerID){
-//     if (document.getElementById(headerID).hasChildNodes()){
-//         const child = document.getElementById(headerID);
-//         child.innerHTML = null;
-//     }
-// }
-
-/*  deletes HTML in a given item ID*/
-function deleteItem(itemID){
-    if (document.getElementById(itemID).hasChildNodes()){
-        const child = document.getElementById(itemID);
+/*  deletes HTML in a given item ID or if it's itemType = "button", eliminates it */
+function deleteItem(itemID, itemType){
+    const child = document.getElementById(itemID);
+    if (itemType == "button" && child != null){
+        document.body.removeChild(child);
+    } else if (child != null && child.hasChildNodes()){
         child.innerHTML = null;
     }
 }
@@ -76,6 +67,7 @@ function onPreReqsButtonClick(){
     searchedCoursePre.forEach(pre  => {
         searchCourse(false, "preReqsCourseSearched", pre);
     })
+    deleteItem(searchedCourseCode, "button");
 }
 
 /*  display course as a list with  */
@@ -110,6 +102,7 @@ function searchCourse(isSearchedCourse, elementID, code){
             displayCourse(false, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
         })
     } else {
+        deleteItem(prevSearchedCourseCode, "button");
         courseArray = getCourseArray(true, '');
         searchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
         searchedCourse
@@ -122,8 +115,8 @@ function searchCourse(isSearchedCourse, elementID, code){
             addHeader("courseSearchTitle","Course Searched:");
             displayCourse(true, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
             addPreReqButton("Get pre-requisites for: " + searchedCourseCode);
-            deleteItem("preReqTitle");
-            deleteItem("preReqsCourseSearched");
+            deleteItem("preReqTitle", "");
+            deleteItem("preReqsCourseSearched", "");
             searchedCoursePre = cData.preq;
             console.log(searchedCoursePre);
             prevSearchedCourseCode = searchedCourseCode;
