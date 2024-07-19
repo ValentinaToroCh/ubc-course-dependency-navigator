@@ -61,65 +61,63 @@ function deleteHeader(headerID){
 }
 
 /*  gets all the pre-requisite courses of the searched course */
+
 function onPreReqsButtonClick(){
     addHeader("preReqTitle", "Course Pre-requisites:");
     alert("button clicked! " + searchedCourseCode);
-    searchedCoursePre.forEach(course  => {
-        fetchCourse(course);
+    searchedCoursePre.forEach(pre  => {
+        searchCourse(false, "preReqsCourseSearched", pre);
     })
-    // fetchCourse(searchedCoursePre);
 }
 
 /*  display course as a list with  */
-function displayCourse(elementID, code, name, cred, desc, prer){
-    document.getElementById(elementID).innerHTML = 
-    "<li>" + code + "</li>" + 
-        "<ul>" + "<li>Course name: " + name + "</li>" + "</ul>" +
-        "<ul>" + "<li>Credits: " + cred + "</li>" + "</ul>" +
-        "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
-        "<ul>" + "<li>Pre-requisites: " + prer + "</li>" + "</ul>";
+function displayCourse(deletePrevElements, elementID, code, name, cred, desc, prer){
+    if(deletePrevElements){
+        document.getElementById(elementID).innerHTML = 
+        "<li>" + code + "</li>" + 
+            "<ul>" + "<li>Course name: " + name + "</li>" + "</ul>" +
+            "<ul>" + "<li>Credits: " + cred + "</li>" + "</ul>" +
+            "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
+            "<ul>" + "<li>Pre-requisites: " + prer + "</li>" + "</ul>";
+    } else {
+        document.getElementById(elementID).innerHTML += 
+            "<li>" + code + "</li>" + 
+            "<ul>" + "<li>Course name: " + name + "</li>" + "</ul>" +
+            "<ul>" + "<li>Credits: " + cred + "</li>" + "</ul>" +
+            "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
+            "<ul>" + "<li>Pre-requisites: " + prer + "</li>" + "</ul>";
+    }
     }
 
-function fetchCourse(courseName){
-    courseArray = getCourseArray(false, courseName);
-    searchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
-    searchedCourse
-    .then(res => {
-        return res.json();
-    })
-    .then(cData => {
-        searchedCourseCode = cData.code;
-        // displayCourse("preReqsCourseSearched", cData.code, cData.name, cData.cred, cData.desc, cData.prer);
-        // addPreReqButton("Get pre-requisites for: " + searchedCourseCode);
-        document.getElementById("preReqsCourseSearched").innerHTML += 
-        "<li>" + cData.code + "</li>" + 
-        "<ul>" + "<li>Course name: " + cData.name + "</li>" + "</ul>" +
-        "<ul>" + "<li>Credits: " + cData.cred + "</li>" + "</ul>" +
-        "<ul>" + "<li>Description: " + cData.desc + "</li>" + "</ul>" +
-        "<ul>" + "<li>Pre-requisites: " + cData.prer + "</li>" + "</ul>";
-    })
-}
-    
-/*  gets course from user input and searches 
-    TODO: expand the function so that it can work with a course as a parameter instead */
-
-function searchCourse(){
-    courseArray = getCourseArray(true, "");
-    searchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
-    searchedCourse
-    .then(res => {
-        return res.json();
-    })
-    .then(cData => {
-        console.log(cData);
-        searchedCourseCode = cData.code;        
-        addHeader("courseSearchTitle","Course Searched:");
-        displayCourse("courseSearched", cData.code, cData.name, cData.cred, cData.desc, cData.prer);
-        addPreReqButton("Get pre-requisites for: " + searchedCourseCode);
-        deleteHeader("preReqTitle");
-        searchedCoursePre = cData.preq;
-        console.log(searchedCoursePre);
-        prevSearchedCourseCode = searchedCourseCode;
-    })
-    
+/*  gets course from input either the form or a button and searches it*/
+function searchCourse(isSearchedCourse, elementID, code){
+    if(!isSearchedCourse){
+        courseArray = getCourseArray(false, code);
+        notSearchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
+        notSearchedCourse
+        .then(res => {
+            return res.json();
+        })
+        .then(cData => {
+            displayCourse(false, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
+        })
+    } else {
+        courseArray = getCourseArray(true, '');
+        searchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
+        searchedCourse
+        .then(res => {
+            return res.json();
+        })
+        .then(cData => {
+            console.log(cData);
+            searchedCourseCode = code = cData.code;  
+            addHeader("courseSearchTitle","Course Searched:");
+            displayCourse(true, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
+            addPreReqButton("Get pre-requisites for: " + searchedCourseCode);
+            deleteHeader("preReqTitle");
+            searchedCoursePre = cData.preq;
+            console.log(searchedCoursePre);
+            prevSearchedCourseCode = searchedCourseCode;
+        })
+    }
 }
