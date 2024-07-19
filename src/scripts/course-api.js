@@ -114,7 +114,10 @@ function searchCourse(isSearchedCourse, elementID, code){
             searchedCourseCode = code = cData.code;  
             addHeader("courseSearchTitle","Course Searched:");
             displayCourse(true, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
-            addPreReqButton("Get pre-requisites for: " + searchedCourseCode);
+            console.log(cData.preq.length);
+            if(cData.preq.length != 0){
+                addPreReqButton("Get pre-requisites for: " + searchedCourseCode);
+            }
             deleteItem("preReqTitle", "");
             deleteItem("preReqsCourseSearched", "");
             searchedCoursePre = cData.preq;
