@@ -21,7 +21,7 @@ function getAllCourses(){
     })
 }
 
- /* get array containing: course Subject and Code from user input to be used 
+ /* get array containing: course Subject and Code from user input or button to be used 
     on the API searching for specific courses */
 function getCourseArray(isFromInput, courseString){
     if (isFromInput){
@@ -31,8 +31,7 @@ function getCourseArray(isFromInput, courseString){
     return courseArray;
 }
 
-/*  dynamically adds a button with a text and links it to a corresponding
-    function if the course has pre-reqs */
+/*  dynamically adds the pre-req button with a text if the course has pre-reqs */
 function addPreReqButton(buttonText){
     if (searchedCoursePre.length != 0 ){
         const btn = document.createElement('button');
@@ -42,20 +41,21 @@ function addPreReqButton(buttonText){
         btn.addEventListener('click', () => {
             onPreReqsButtonClick();
         });
-        console.log("created button id: " + btn.id);
     }
 }
 
+/*  dynammy adds a "get course info" button with text */
 function addGetCourseButton(buttonText, courseID, elementID){
     if (searchedCoursePre.length != 0 ){
         const btn = document.createElement('button');
         btn.innerHTML = buttonText;
         btn.id = courseID;
-        document.getElementById(elementID).appendChild(btn);
         btn.addEventListener('click', () => {
             onSearchCourseButtinClick(btn.id);
+            onSearchCourseButtinClick(courseID);
         });
         console.log("created button id on get course: " + btn.id);
+        document.getElementById(elementID).appendChild(btn); 
     }
 }
 
@@ -74,10 +74,10 @@ function deleteItem(itemID, itemType){
     }
 }
 
+/*  on search course, make that course the input and search for info */
 function onSearchCourseButtinClick(courseID){
     input = document.getElementById("courseInput");
     input.value = courseID;
-    searchedCourse = courseID;
     searchCourse(true,  'courseSearched','');
 }
 
@@ -86,11 +86,11 @@ function onPreReqsButtonClick(){
     addHeader("preReqTitle", "Course Pre-requisites:");
     searchedCoursePre.forEach(pre  => {
         searchCourse(false, "preReqsCourseSearched", pre);
-    })
+    });
     deleteItem(searchedCourseCode, "button");
 }
 
-/*  display course as a list with  */
+/*  display course as a list with elements */
 function displayCourse(deletePrevElements, elementID, code, name, cred, desc, prer){
     if(deletePrevElements){
         document.getElementById(elementID).innerHTML = 
@@ -100,12 +100,14 @@ function displayCourse(deletePrevElements, elementID, code, name, cred, desc, pr
             "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
             "<ul>" + "<li>Pre-requisites: " + prer + "</li>" + "</ul>";
     } else {
-        document.getElementById(elementID).innerHTML += 
+        const courseListItem = document.createElement("li");
+        courseListItem.innerHTML = 
             "<li>" + code + "</li>" + 
             "<ul>" + "<li>Course name: " + name + "</li>" + "</ul>" +
             "<ul>" + "<li>Credits: " + cred + "</li>" + "</ul>" +
             "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
             "<ul>" + "<li>Pre-requisites: " + prer + "</li>" + "</ul>";
+        document.getElementById(elementID).appendChild(courseListItem);
     }
 }
 
@@ -121,9 +123,9 @@ function searchCourse(isSearchedCourse, elementID, code){
             return res.json();
         })
         .then(cData => {
-            displayCourse(false, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
-            addGetCourseButton("Get course info: " + code, code, elementID);
-        })
+                displayCourse(false, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
+                addGetCourseButton("Get course info: " + code, code, elementID);
+        });
     } else {
         // course from search, delete button from prev-searched course
         deleteItem(prevSearchedCourseCode, "button");
@@ -143,7 +145,6 @@ function searchCourse(isSearchedCourse, elementID, code){
             displayCourse(true, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
             // add pre to global variable 
             searchedCoursePre = cData.preq;
-            console.log(searchedCoursePre);
             // add pre-reqs button and delete any prevs items
             addPreReqButton("Get pre-requisites for: " + searchedCourseCode);
             deleteItem("preReqTitle", "");
