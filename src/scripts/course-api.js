@@ -51,10 +51,8 @@ function addGetCourseButton(buttonText, courseID, elementID){
         btn.innerHTML = buttonText;
         btn.id = courseID;
         btn.addEventListener('click', () => {
-            onSearchCourseButtinClick(btn.id);
             onSearchCourseButtinClick(courseID);
         });
-        console.log("created button id on get course: " + btn.id);
         document.getElementById(elementID).appendChild(btn); 
     }
 }
