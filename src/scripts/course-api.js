@@ -31,7 +31,7 @@ function getCourseArray(isFromInput, courseString){
     return courseArray;
 }
 
-    if (searchedCoursePre.length != 0 ){
+/*  dinamically adds a button linked to a specified function
     used for the "get pre-reqs" and "get depn" buttons*/
 function addGetButton(buttonText, buttonFn, courseID, elementID){
     const preCond = searchedCoursePre.length != 0 && buttonText.includes("pre-requisites");
@@ -156,6 +156,8 @@ function searchCourse(isSearchedCourse, elementID, code){
         });
     } else {
         // course from search, delete button from prev-searched course
+        deleteItem("pre-"+searchedCourseCode, "button");
+        deleteItem("depn-"+searchedCourseCode, "button");
         deleteItem(prevSearchedCourseCode, "button");
         // make array = MATH, 200
         courseArray = getCourseArray(true, '');
