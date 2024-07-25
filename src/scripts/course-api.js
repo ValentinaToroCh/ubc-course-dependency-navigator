@@ -110,7 +110,7 @@ function onPreReqsButtonClick(){
 
 /*  gets all the dependent courses of the searched course */
 function onDepnsButtonClick(){
-    addHeader("depnTitle", "Course Dependents");
+    addHeader("depnTitle", "Course Dependents:");
     searchedCourseDepn.forEach(depn => {
         searchCourse(false, "depnCourseSearched", depn);
     });
@@ -122,15 +122,14 @@ function onDepnsButtonClick(){
 function displayCourse(deletePrevElements, elementID, code, name, cred, desc, prer){
     if(deletePrevElements){
         document.getElementById(elementID).innerHTML = 
-        "<li>" + code + "</li>" + 
-            "<ul>" + "<li>Course name: " + name + "</li>" + "</ul>" +
+            "<li style='font-weight: bold'>" + code + ": " + name + "</li>" + 
             "<ul>" + "<li>Credits: " + cred + "</li>" + "</ul>" +
             "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
             "<ul>" + "<li>Pre-requisites: " + prer + "</li>" + "</ul>";
     } else {
         const courseListItem = document.createElement("li");
         courseListItem.innerHTML = 
-            "<li>" + code + "</li>" + 
+            "<li style='font-weight: bold'>" + code + ": " + name + "</li>" + 
             "<ul>" + "<li>Course name: " + name + "</li>" + "</ul>" +
             "<ul>" + "<li>Credits: " + cred + "</li>" + "</ul>" +
             "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
