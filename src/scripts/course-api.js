@@ -143,46 +143,48 @@ function searchCourse(isSearchedCourse, elementID, code){
     if(!isSearchedCourse){
         // make array = MATH, 200
         courseArray = getCourseArray(false, code);
-        notSearchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
-        notSearchedCourse
-        // parse into JSON
-        .then(res => {
-            return res.json();
-        })
-        .then(cData => {
-                displayCourse(false, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
-                addGetInfoButton("Get course info: " + code, code, elementID);
-        });
+            notSearchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
+            notSearchedCourse
+            // parse into JSON
+            .then(res => {
+                return res.json();
+            })
+            .then(cData => {
+                    displayCourse(false, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
+                    addGetInfoButton("Get course info: " + code, code, elementID);
+            });
     } else {
         // course from search, delete button from prev-searched course
         deleteItem("pre-"+searchedCourseCode, "button");
         deleteItem("depn-"+searchedCourseCode, "button");
         deleteItem(prevSearchedCourseCode, "button");
         // make array = MATH, 200
-        courseArray = getCourseArray(true, '');
-        searchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
-        searchedCourse
-        .then(res => {
-            return res.json();
-        })
-        .then(cData => {
-            console.log(cData);
-            // make search course, the button info 
-            searchedCourseCode = code = cData.code;  
-            // add header and display course 
-            addHeader("courseSearchTitle","Course Searched:");
-            displayCourse(true, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
-            // add pre and depn to global variable 
-            searchedCoursePre = cData.preq;
-            searchedCourseDepn = cData.depn;
-            // add pre-reqs button and delete any prevs items
-            addGetButton("Get pre-requisites for: " + searchedCourseCode, onPreReqsButtonClick, searchedCourseCode, "");
-            deleteItem("preReqTitle", "");
-            deleteItem("preReqsCourseSearched", "");
-            addGetButton("Get dependents of: " + searchedCourseCode, onDepnsButtonClick, searchedCourseCode, "");
-            deleteItem("depnTitle", "");
-            deleteItem("depnCourseSearched", "");
-            prevSearchedCourseCode = searchedCourseCode;
-        })
+            courseArray = getCourseArray(true, '');
+            searchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
+            searchedCourse
+            .then(res => {
+                return res.json();
+            })
+            .then(cData => {
+                console.log(cData);
+                // make search course, the button info 
+                searchedCourseCode = code = cData.code;  
+                // add header and display course 
+                addHeader("courseSearchTitle","Course Searched:");
+                displayCourse(true, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
+                // add pre and depn to global variable 
+                searchedCoursePre = cData.preq;
+                searchedCourseDepn = cData.depn;
+                // add pre-reqs button and delete any prevs items
+                addGetButton("Get pre-requisites for: " + searchedCourseCode, onPreReqsButtonClick, searchedCourseCode, "");
+                deleteItem("preReqTitle", "");
+                deleteItem("preReqsCourseSearched", "");
+                addGetButton("Get dependents of: " + searchedCourseCode, onDepnsButtonClick, searchedCourseCode, "");
+                deleteItem("depnTitle", "");
+                deleteItem("depnCourseSearched", "");
+                prevSearchedCourseCode = searchedCourseCode;
+            }).catch(() => {
+                window.alert("Course not found");
+            });
     }
 }
