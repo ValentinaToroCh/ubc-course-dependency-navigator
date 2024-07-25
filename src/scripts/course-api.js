@@ -120,6 +120,9 @@ function onDepnsButtonClick(){
 
 /*  display course as a list with elements */
 function displayCourse(deletePrevElements, elementID, code, name, cred, desc, prer){
+    if(prer == undefined){
+        prer = "No courses were listed as pre-requisites. However, there may be some other restrictions to take this course.";
+    }
     if(deletePrevElements){
         document.getElementById(elementID).innerHTML = 
             "<li style='font-weight: bold'>" + code + ": " + name + "</li>" + 
