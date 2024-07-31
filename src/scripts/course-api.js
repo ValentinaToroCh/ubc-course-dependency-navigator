@@ -106,39 +106,31 @@ function onDepnsButtonClick(){
     });
 }
 
-/*  display course as a list with elements */
+/*  display course with its elements. If it is a pre-req or dependent, 
+    creates a toggle item */
 function displayCourse(deletePrevElements, elementID, code, name, cred, desc, prer){
     if(prer == undefined){
         prer = "No courses were listed as pre-requisites. However, there may be some other restrictions to take this course.";
     }
     if(deletePrevElements){
-        // document.getElementById(elementID).innerHTML = 
-        //     "<li style='font-weight: bold'>" + code + ": " + name + "</li>" + 
-        //     "<ul>" + "<li>Credits: " + cred + "</li>" + "</ul>" +
-        //     "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
-        //     "<ul>" + "<li>Pre-requisites: " + prer + "</li>" + "</ul>";
-        document.getElementById(elementID).innerHTML =
+        const courseItem = document.getElementById(elementID);
+        courseItem.className = "row";
+        courseItem.innerHTML =
             "<p style='font-weight: bold'>" + code + ": " + name + "</p>" + 
             "<p>Description: " + desc + "</p>" + 
             "<p>Pre-requisites: " + prer + "</p>" + 
             "<p style='font-size:small'>Credits: " + cred + "</p>";
     } else {
-        // const courseListItem = document.createElement("li");
-        // courseListItem.innerHTML = 
-        //     "<li style='font-weight: bold'>" + code + ": " + name + "</li>" + 
-        //     "<ul>" + "<li>Course name: " + name + "</li>" + "</ul>" +
-        //     "<ul>" + "<li>Credits: " + cred + "</li>" + "</ul>" +
-        //     "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
-        //     "<ul>" + "<li>Pre-requisites: " + prer + "</li>" + "</ul>";
-        // document.getElementById(elementID).appendChild(courseListItem);
         const courseListItem = document.createElement("div");
         courseListItem.className = "row";
         courseListItem.id = "row-"+ code;
         courseListItem.innerHTML = 
-            "<p style='font-weight: bold'>" + code + ": " + name + "</p>" + 
+            "<details close>" + 
+            "<summary>" + code + ": " + name + "</summary>"+
             "<p>Description: " + desc + "</p>" + 
             "<p>Pre-requisites: " + prer + "</p>" + 
-            "<p style='font-size:small'>Credits: " + cred + "</p>";
+            "<p style='font-size:small'>Credits: " + cred + "</p>" + 
+            "</details>";
         document.getElementById(elementID).appendChild(courseListItem);
     } 
 }
@@ -152,10 +144,10 @@ function searchCourseInput(){
         .then(cData => {
             console.log(cData);
             displayCourse(true, "courseSearched", cData.code, cData.name, cData.cred, cData.desc, cData.prer);
-                // set global variables 
+                // set global variables, removing pre and depn duplicates 
                 searchedCourseCode = cData.code;
-                searchedCoursePre = cData.preq;
-                searchedCourseDepn = cData.depn;
+                searchedCoursePre = [... new Set(cData.preq)];
+                searchedCourseDepn = [... new Set(cData.depn)];
                 // add pre-reqs button and delete any prevs items
                 addGetButton("Get pre-requisites for: " + searchedCourseCode, onPreReqsButtonClick, searchedCourseCode, "courseSearched");
                 deleteItem("preReqTitle", "");
