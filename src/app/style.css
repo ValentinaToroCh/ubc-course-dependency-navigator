@@ -1,14 +1,17 @@
 body{
     /* font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
+    font-size: medium;
     font-family: "Lato", sans-serif;
     font-weight: 400;
     font-style: normal;
+    /* background-color: blueviolet; */
 }
 
 input{
     font-family: "Lato", sans-serif;
     font-weight: 400;
     font-style: normal;
+    border-radius: 10px;
 }
 
 h1 {
@@ -19,6 +22,45 @@ h2 {
     color:cadetblue;
 }
 
+br{
+    margin: 5px;
+}
+
+/* .courseSearchedStyle{
+    background-color:#E6E6E6;
+    border-radius: 10px;
+    /* margin-bottom: 20px; 
+} */
+
+p{
+    margin: 10px;
+}
+
+/* @media screen and (max-width: 600px) {
+    .column {
+      width: 100%;
+    }
+} */
+
+.column{
+    /* background-color:#E6E6E6; */
+    padding: 5px;
+    float: left;
+    width: 32%;
+    column-gap: 5px;
+}
+
+.row {
+    background-color: #E6E6E6;
+}
+
+
+.column > div {
+    /* background-color:#E6E6E6; */
+    border-radius: 10px;
+    flex: 200px;
+}
+
 button {
     background-color: cadetblue;
     color: whitesmoke;
@@ -26,4 +68,5 @@ button {
     font-family: "Lato", sans-serif;
     font-weight: 700;
     font-style: normal;
+    border-radius: 25px;
 }

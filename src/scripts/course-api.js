@@ -39,6 +39,7 @@ function addGetButton(buttonText, buttonFn, courseID, elementID){
     if(preCond || depnCond){
         const btn = document.createElement('button');
         const brk = document.createElement('br');
+        // set-up button and break id for deletion
         if(preCond){
             btn.id = "pre-"+courseID;
         } else {
@@ -53,13 +54,8 @@ function addGetButton(buttonText, buttonFn, courseID, elementID){
                 buttonFn(courseID);
             }
         });
-        // searched course
-        if(elementID == "") {
-            document.body.appendChild(btn);
-            document.body.appendChild(brk); 
-        } else {
-            document.getElementById(elementID).appendChild(btn); 
-        }
+            document.getElementById(elementID).appendChild(btn);
+            document.getElementById(elementID).appendChild(brk); 
     }
 }
 
@@ -79,14 +75,10 @@ function addHeader(headerID, headerText){
     document.getElementById(headerID).innerHTML = headerText;
 }
 
-/*  deletes HTML in a given item ID or if it's itemType = "button", eliminates it */
-function deleteItem(itemID, itemType){
+/*  deletes HTML in a given item ID */
+function deleteItem(itemID){
     const child = document.getElementById(itemID);
-    const breakAdded = document.getElementById("addedBrk");
-    if (itemType == "button" && child != null){
-        document.body.removeChild(breakAdded);
-        document.body.removeChild(child);
-    } else if (child != null && child.hasChildNodes()){
+    if (child != null && child.hasChildNodes()){
         child.innerHTML = null;
     }
 }
@@ -95,27 +87,23 @@ function deleteItem(itemID, itemType){
 function onSearchCourseButtonClick(courseID){
     input = document.getElementById("courseInput");
     input.value = courseID;
-    searchCourse(true,  'courseSearched','');
+    searchCourseInput();
 }
 
 /*  gets all the pre-requisite courses of the searched course */
 function onPreReqsButtonClick(){
     addHeader("preReqTitle", "Course Pre-requisites:");
     searchedCoursePre.forEach(pre  => {
-        searchCourse(false, "preReqsCourseSearched", pre);
+        searchCourseButton("preReqsCourseSearched", pre);
     });
-    deleteItem("pre-"+searchedCourseCode, "button");
-    deleteItem("depn-"+searchedCourseCode, "button");
 }
 
 /*  gets all the dependent courses of the searched course */
 function onDepnsButtonClick(){
     addHeader("depnTitle", "Course Dependents:");
     searchedCourseDepn.forEach(depn => {
-        searchCourse(false, "depnCourseSearched", depn);
+        searchCourseButton("depnCourseSearched", depn);
     });
-    deleteItem("pre-"+searchedCourseCode, "button");
-    deleteItem("depn-"+searchedCourseCode, "button");
 }
 
 /*  display course as a list with elements */
@@ -124,70 +112,73 @@ function displayCourse(deletePrevElements, elementID, code, name, cred, desc, pr
         prer = "No courses were listed as pre-requisites. However, there may be some other restrictions to take this course.";
     }
     if(deletePrevElements){
-        document.getElementById(elementID).innerHTML = 
-            "<li style='font-weight: bold'>" + code + ": " + name + "</li>" + 
-            "<ul>" + "<li>Credits: " + cred + "</li>" + "</ul>" +
-            "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
-            "<ul>" + "<li>Pre-requisites: " + prer + "</li>" + "</ul>";
+        // document.getElementById(elementID).innerHTML = 
+        //     "<li style='font-weight: bold'>" + code + ": " + name + "</li>" + 
+        //     "<ul>" + "<li>Credits: " + cred + "</li>" + "</ul>" +
+        //     "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
+        //     "<ul>" + "<li>Pre-requisites: " + prer + "</li>" + "</ul>";
+        document.getElementById(elementID).innerHTML =
+            "<p style='font-weight: bold'>" + code + ": " + name + "</p>" + 
+            "<p>Description: " + desc + "</p>" + 
+            "<p>Pre-requisites: " + prer + "</p>" + 
+            "<p style='font-size:small'>Credits: " + cred + "</p>";
     } else {
-        const courseListItem = document.createElement("li");
+        // const courseListItem = document.createElement("li");
+        // courseListItem.innerHTML = 
+        //     "<li style='font-weight: bold'>" + code + ": " + name + "</li>" + 
+        //     "<ul>" + "<li>Course name: " + name + "</li>" + "</ul>" +
+        //     "<ul>" + "<li>Credits: " + cred + "</li>" + "</ul>" +
+        //     "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
+        //     "<ul>" + "<li>Pre-requisites: " + prer + "</li>" + "</ul>";
+        // document.getElementById(elementID).appendChild(courseListItem);
+        const courseListItem = document.createElement("div");
+        courseListItem.className = "row";
+        courseListItem.id = "row-"+ code;
         courseListItem.innerHTML = 
-            "<li style='font-weight: bold'>" + code + ": " + name + "</li>" + 
-            "<ul>" + "<li>Course name: " + name + "</li>" + "</ul>" +
-            "<ul>" + "<li>Credits: " + cred + "</li>" + "</ul>" +
-            "<ul>" + "<li>Description: " + desc + "</li>" + "</ul>" +
-            "<ul>" + "<li>Pre-requisites: " + prer + "</li>" + "</ul>";
+            "<p style='font-weight: bold'>" + code + ": " + name + "</p>" + 
+            "<p>Description: " + desc + "</p>" + 
+            "<p>Pre-requisites: " + prer + "</p>" + 
+            "<p style='font-size:small'>Credits: " + cred + "</p>";
         document.getElementById(elementID).appendChild(courseListItem);
-    }
+    } 
 }
 
-/*  gets course from input either the form or a button and searches it*/
-function searchCourse(isSearchedCourse, elementID, code){
-    if(!isSearchedCourse){
-        // make array = MATH, 200
-        courseArray = getCourseArray(false, code);
-            notSearchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
-            notSearchedCourse
-            // parse into JSON
-            .then(res => {
-                return res.json();
-            })
-            .then(cData => {
-                    displayCourse(false, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
-                    addGetInfoButton("Get course info: " + code, code, elementID);
-            });
-    } else {
-        // course from search, delete button from prev-searched course
-        deleteItem("pre-"+searchedCourseCode, "button");
-        deleteItem("depn-"+searchedCourseCode, "button");
-        deleteItem(prevSearchedCourseCode, "button");
-        // make array = MATH, 200
-            courseArray = getCourseArray(true, '');
-            searchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
-            searchedCourse
-            .then(res => {
-                return res.json();
-            })
-            .then(cData => {
-                console.log(cData);
-                // make search course, the button info 
-                searchedCourseCode = code = cData.code;  
-                // add header and display course 
-                addHeader("courseSearchTitle","Course Searched:");
-                displayCourse(true, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
-                // add pre and depn to global variable 
+/*  gets course from input */
+function searchCourseInput(){
+    courseArray = getCourseArray(true, '');
+    searchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
+    searchedCourse
+        .then(res => {return res.json(); })
+        .then(cData => {
+            console.log(cData);
+            displayCourse(true, "courseSearched", cData.code, cData.name, cData.cred, cData.desc, cData.prer);
+                // set global variables 
+                searchedCourseCode = cData.code;
                 searchedCoursePre = cData.preq;
                 searchedCourseDepn = cData.depn;
                 // add pre-reqs button and delete any prevs items
-                addGetButton("Get pre-requisites for: " + searchedCourseCode, onPreReqsButtonClick, searchedCourseCode, "");
+                addGetButton("Get pre-requisites for: " + searchedCourseCode, onPreReqsButtonClick, searchedCourseCode, "courseSearched");
                 deleteItem("preReqTitle", "");
                 deleteItem("preReqsCourseSearched", "");
-                addGetButton("Get dependents of: " + searchedCourseCode, onDepnsButtonClick, searchedCourseCode, "");
+                addGetButton("Get dependents of: " + searchedCourseCode, onDepnsButtonClick, searchedCourseCode, "courseSearched");
                 deleteItem("depnTitle", "");
                 deleteItem("depnCourseSearched", "");
                 prevSearchedCourseCode = searchedCourseCode;
             }).catch(() => {
                 window.alert("Course not found");
             });
-    }
+}
+
+/*  gets course from a button and searches it*/
+function searchCourseButton(elementID, code){
+    // make array = MATH, 200
+    courseArray = getCourseArray(false, code);
+    notSearchedCourse = fetch('https://ubcexplorer.io/getCourseInfo/' + courseArray[0] + '%20' + courseArray[1]);
+    notSearchedCourse
+        // parse into JSON
+        .then(res => { return res.json(); })
+        .then(cData => {
+                displayCourse(false, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
+                addGetInfoButton("Get course info: " + code, code,"row-"+ code);
+        });
 }
