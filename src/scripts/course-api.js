@@ -53,6 +53,8 @@ function addGetButton(buttonText, buttonFn, courseID, elementID){
             } else {
                 buttonFn(courseID);
             }
+            btn.remove();
+            brk.remove();
         });
             document.getElementById(elementID).appendChild(btn);
             document.getElementById(elementID).appendChild(brk); 
@@ -135,6 +137,10 @@ function displayCourse(deletePrevElements, elementID, code, name, cred, desc, pr
     } 
 }
 
+// function setColumnWidth(column){
+//     column 
+// }
+
 /*  gets course from input */
 function searchCourseInput(){
     courseArray = getCourseArray(true, '');
@@ -156,6 +162,10 @@ function searchCourseInput(){
                 deleteItem("depnTitle", "");
                 deleteItem("depnCourseSearched", "");
                 prevSearchedCourseCode = searchedCourseCode;
+                // if(searchedCoursePre.length == 0 || searchedCourseDepn.length == 0){
+                //     console.log("one array is empty!");
+                //     setColumnWidth();
+                // }
             }).catch(() => {
                 window.alert("Course not found");
             });
