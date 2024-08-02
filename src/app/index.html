@@ -8,41 +8,42 @@
     </head>
     <body>
         <!-- <div class="row"> -->
-        <div class="column">
-            <h1>Course Search</h1>
-            <p>
-                An easier way to figure out dependencies on UBC courses, you'll be
-                able to search for a given course and its pre-requisites.
-            </p>
-            <!-- TODO: include input validation -->
-            <input type="text" id="courseInput" placeholder="Enter a Course">
-            <button type="submit" id="courseInputSubmit" onclick="searchCourseInput()">Submit</button>
-        <!-- <p>
-            In case you'd like to search for all UBC courses you can also do so pressing
-            the button below. However, it can be time-consuming to load. 
-        </p> -->
-        <!-- button to get all courses -->
-        <!-- <button type="button" onclick="getAllCourses()"> Get All Course Codes </button>  -->
+        <!-- <div class="searched-column" id="search-column"> -->
+        <div class="columns">
+            <div class="searched-column" id="search-column">
+            <!-- <div class="column" id="search-column"> -->
 
-        <!-- searched course -->
-        <!-- <ul id="courseSearched"></ul> -->
-        <div id="courseSearched" class="courseSearchedStyle"></div>
-        </div>
+                <h1>Course Search</h1>
+                <p>
+                    An easier way to figure out dependencies on UBC courses, you'll be
+                    able to search for a given course and its pre-requisites.
+                </p>
+                <!-- TODO: include input validation -->
+                <input type="text" id="courseInput" placeholder="Enter a Course">
+                <button type="submit" id="courseInputSubmit" onclick="searchCourseInput()">Submit</button>
+                <!-- <p>
+                    In case you'd like to search for all UBC courses you can also do so pressing
+                    the button below. However, it can be time-consuming to load. 
+                </p> -->
+                <!-- button to get all courses -->
+                <!-- <button type="button" onclick="getAllCourses()"> Get All Course Codes </button>  -->
 
-        <div class="column">
-            <!-- searched course pre-reqs -->
-            <h2 id="preReqTitle"></h2>
-            <!-- <ul id="preReqsCourseSearched"></ul> -->
-            <div id="preReqsCourseSearched" class="courseSearchedStyle"></div>
-        </div>
+                <!-- searched course -->
+                <div id="courseSearched" class="courseSearchedStyle"></div>
+            </div>
+            <!-- <div class="columns"> -->
+            <div class="column"  id="pre-column">
+                <!-- searched course pre-reqs -->
+                <h2 id="preReqTitle"></h2>
+                <div id="preReqsCourseSearched" class="courseSearchedStyle"></div>
+            </div>
 
-        <div class="column">
-            <!-- searched course depn -->
-            <h2 id="depnTitle"></h2>
-            <!-- <ul id="depnCourseSearched"></ul> -->
-            <div id="depnCourseSearched" class="courseSearchedStyle"></div>
+            <div class="column"  id="depn-column">
+                <!-- searched course depn -->
+                <h2 id="depnTitle"></h2>
+                <div id="depnCourseSearched" class="courseSearchedStyle"></div>
+            </div>
         </div>
-    <!-- </div> -->
 
         <script type="text/javascript" src="../scripts/course-api.js"></script> 
 
