@@ -50,8 +50,10 @@ function addGetButton(buttonText, buttonFn, courseID, elementID){
         btn.addEventListener('click', () => {
             if(preCond){
                 buttonFn();
+                document.getElementById("pre-column").style.width = "66.66%";
             } else {
                 buttonFn(courseID);
+                document.getElementById("depn-column").style.width = "66.66%";
             }
             btn.remove();
             brk.remove();
@@ -68,6 +70,8 @@ function addGetInfoButton(buttonText, courseID, elementID){
         btn.id = courseID;
         btn.addEventListener('click', () => {
             onSearchCourseButtonClick(courseID);
+            document.getElementById("pre-column").style.width = "auto";
+            document.getElementById("depn-column").style.width = "auto";
         });
     document.getElementById(elementID).appendChild(btn);
 }
