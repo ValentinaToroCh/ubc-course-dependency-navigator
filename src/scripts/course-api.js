@@ -25,7 +25,8 @@ function getAllCourses(){
     on the API searching for specific courses */
 function getCourseArray(isFromInput, courseString){
     if (isFromInput){
-        courseString = document.getElementById('courseInput').value; 
+        courseString = document.getElementById('courseInput').value;
+        document.getElementById('courseInput').value = courseString.toUpperCase();
     } 
     const courseArray = courseString.toUpperCase().split(" ");
     return courseArray;
@@ -38,14 +39,12 @@ function addGetButton(buttonText, buttonFn, courseID, elementID){
     const depnCond = searchedCourseDepn.length !=0 && buttonText.includes("dependents");
     if(preCond || depnCond){
         const btn = document.createElement('button');
-        const brk = document.createElement('br');
         // set-up button and break id for deletion
         if(preCond){
             btn.id = "pre-"+courseID;
         } else {
             btn.id = "depn-"+courseID;
         }
-        brk.id = "addedBrk";
         btn.innerHTML = buttonText;
         btn.addEventListener('click', () => {
             if(preCond){
@@ -56,10 +55,8 @@ function addGetButton(buttonText, buttonFn, courseID, elementID){
                 document.getElementById("depn-column").style.width = "66.66%";
             }
             btn.remove();
-            brk.remove();
         });
         document.getElementById(elementID).appendChild(btn);
-        document.getElementById(elementID).appendChild(brk); 
     }
 }
 
@@ -122,7 +119,7 @@ function displayCourse(deletePrevElements, elementID, code, name, cred, desc, pr
         const courseItem = document.getElementById(elementID);
         courseItem.className = "row";
         courseItem.innerHTML =
-            "<p style='font-weight: bold'>" + code + ": " + name + "</p>" + 
+            "<p style='font-weight: bold; margin:0px'>" + code + ": " + name + "</p>" + 
             "<p>Description: " + desc + "</p>" + 
             "<p>Pre-requisites: " + prer + "</p>" + 
             "<p style='font-size:small'>Credits: " + cred + "</p>";
@@ -132,7 +129,7 @@ function displayCourse(deletePrevElements, elementID, code, name, cred, desc, pr
         courseListItem.id = "row-"+ code;
         courseListItem.innerHTML = 
             "<details close>" + 
-            "<summary>" + code + ": " + name + "</summary>"+
+            "<summary style='margin:0px'>" + code + ": " + name + "</summary>"+
             "<p>Description: " + desc + "</p>" + 
             "<p>Pre-requisites: " + prer + "</p>" + 
             "<p style='font-size:small'>Credits: " + cred + "</p>" + 
