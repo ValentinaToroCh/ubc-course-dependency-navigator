@@ -58,22 +58,22 @@ function addGetButton(buttonText, buttonFn, courseID, elementID){
             btn.remove();
             brk.remove();
         });
-            document.getElementById(elementID).appendChild(btn);
-            document.getElementById(elementID).appendChild(brk); 
+        document.getElementById(elementID).appendChild(btn);
+        document.getElementById(elementID).appendChild(brk); 
     }
 }
 
 /*  dinamically adds "get info" button */
-function addGetInfoButton(buttonText, courseID, elementID){
-    const btn = document.createElement('button');
-        btn.innerHTML = buttonText;
-        btn.id = courseID;
-        btn.addEventListener('click', () => {
+function addGetInfoButton(buttonText, courseID){
+    const btn = document.getElementById("button-"+courseID);
+    console.log(btn);
+    btn.innerHTML = buttonText;
+    console.log(btn);
+    btn.addEventListener('click', () => {
             onSearchCourseButtonClick(courseID);
             document.getElementById("pre-column").style.width = "auto";
             document.getElementById("depn-column").style.width = "auto";
-        });
-    document.getElementById(elementID).appendChild(btn);
+    });
 }
 
 /*  adds a header */
@@ -136,14 +136,14 @@ function displayCourse(deletePrevElements, elementID, code, name, cred, desc, pr
             "<p>Description: " + desc + "</p>" + 
             "<p>Pre-requisites: " + prer + "</p>" + 
             "<p style='font-size:small'>Credits: " + cred + "</p>" + 
+            "<button type='button'></button>"
             "</details>";
         document.getElementById(elementID).appendChild(courseListItem);
+        const row = document.getElementById(courseListItem.id);
+        const button = row.getElementsByTagName("button");
+        button[0].id = "button-"+code;
     } 
 }
-
-// function setColumnWidth(column){
-//     column 
-// }
 
 /*  gets course from input */
 function searchCourseInput(){
@@ -166,10 +166,6 @@ function searchCourseInput(){
                 deleteItem("depnTitle", "");
                 deleteItem("depnCourseSearched", "");
                 prevSearchedCourseCode = searchedCourseCode;
-                // if(searchedCoursePre.length == 0 || searchedCourseDepn.length == 0){
-                //     console.log("one array is empty!");
-                //     setColumnWidth();
-                // }
             }).catch(() => {
                 window.alert("Course not found");
             });
@@ -185,6 +181,6 @@ function searchCourseButton(elementID, code){
         .then(res => { return res.json(); })
         .then(cData => {
                 displayCourse(false, elementID, code, cData.name, cData.cred, cData.desc, cData.prer);
-                addGetInfoButton("Get course info: " + code, code,"row-"+ code);
+                addGetInfoButton("Get course info: " + code, code);
         });
 }
