@@ -39,6 +39,7 @@ function addGetButton(buttonText, buttonFn, courseID, elementID){
     const depnCond = searchedCourseDepn.length !=0 && buttonText.includes("dependents");
     if(preCond || depnCond){
         const btn = document.createElement('button');
+        const brk = document.createElement('br');
         // set-up button and break id for deletion
         if(preCond){
             btn.id = "pre-"+courseID;
@@ -55,8 +56,10 @@ function addGetButton(buttonText, buttonFn, courseID, elementID){
                 document.getElementById("depn-column").style.width = "66.66%";
             }
             btn.remove();
+            brk.remove();
         });
         document.getElementById(elementID).appendChild(btn);
+        document.getElementById(elementID).appendChild(brk);
     }
 }
 
@@ -95,6 +98,7 @@ function onSearchCourseButtonClick(courseID){
 
 /*  gets all the pre-requisite courses of the searched course */
 function onPreReqsButtonClick(){
+    document.getElementById("preReqsCourseSearched").setAttribute("style", "border:hidden");
     addHeader("preReqTitle", "Course Pre-requisites:");
     searchedCoursePre.forEach(pre  => {
         searchCourseButton("preReqsCourseSearched", pre);
@@ -103,6 +107,7 @@ function onPreReqsButtonClick(){
 
 /*  gets all the dependent courses of the searched course */
 function onDepnsButtonClick(){
+    // document.getElementById("depnCourseSearched").setAttribute("style", "border:hidden");
     addHeader("depnTitle", "Course Dependents:");
     searchedCourseDepn.forEach(depn => {
         searchCourseButton("depnCourseSearched", depn);
@@ -130,10 +135,12 @@ function displayCourse(deletePrevElements, elementID, code, name, cred, desc, pr
         courseListItem.innerHTML = 
             "<details close>" + 
             "<summary style='margin:0px'>" + code + ": " + name + "</summary>"+
-            "<p>Description: " + desc + "</p>" + 
-            "<p>Pre-requisites: " + prer + "</p>" + 
-            "<p style='font-size:small'>Credits: " + cred + "</p>" + 
-            "<button type='button'></button>"
+            "<div>" +  
+                "<p>Description: " + desc + "</p>" + 
+                "<p>Pre-requisites: " + prer + "</p>" + 
+                "<p style='font-size:small'>Credits: " + cred + "</p>" + 
+                "<button type='button'></button>" + 
+            "</div>"
             "</details>";
         document.getElementById(elementID).appendChild(courseListItem);
         const row = document.getElementById(courseListItem.id);

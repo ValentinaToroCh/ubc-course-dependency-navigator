@@ -1,10 +1,8 @@
 body{
-    /* font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
     font-size: medium;
     font-family: "Lato", sans-serif;
     font-weight: 400;
     font-style: normal;
-    /* background-color: blueviolet; */
 }
 
 input{
@@ -41,8 +39,6 @@ p{
 .columns{
     display: flex;
     overflow: auto;
-    /* flex: auto; */
-    /* flex-direction: row; */
 } 
 
 .searched-column{ 
@@ -58,17 +54,25 @@ p{
     padding: 10px;
 }
 
+.courseSearchedStyle{
+    border-style: dashed;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: #E6E6E6;
+}
+
+.preStyle{
+    border-style: dashed;
+    border-width: 2px;
+    border-color: #E6E6E6;
+}
+
+
 .column{
     padding: 5px;
     column-gap: 5px;
     flex: auto;
     overflow: hidden;
-    /* width: auto; */
-    /* width: 33.33%; */
-    /* min-width: 33.33%; */
-    /* max-width: 66.67%; */
-    /* flex-basis: 1;
-    flex-grow: 100%; */
 }
 
 .row {
@@ -82,10 +86,10 @@ p{
 .column > div {
     border-radius: 10px;
     overflow-wrap: break-word;
+    height: 100%;
 }
 
 summary {
-    /* flex: 200px; */
     margin: 10px;
     cursor: pointer;
     background-color:#E6E6E6;
@@ -94,6 +98,7 @@ summary {
     border: none;
     text-align: left;
     font-size: medium;
+    display: block; 
 }
 
 button {
